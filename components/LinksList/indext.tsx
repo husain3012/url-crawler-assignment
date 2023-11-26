@@ -62,7 +62,7 @@ const LinksList = ({ urls }: { urls: string[] }) => {
           <h2 className="card-title">{urls.length} URLs Found</h2>
           <span>(Showing {urlList.length})</span>
         </div>
-        <span>
+        <span className="text-xs">
           {" "}
           Click
           <kbd className="kbd kbd-xs">Start Processing</kbd> to scan all the
