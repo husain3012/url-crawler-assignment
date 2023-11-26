@@ -54,10 +54,10 @@ export default async function Summary({
               </div>
               <div className="stat place-items-center">
                 <div className="stat-title">Status Code</div>
-                <div className={`stat-value ${statusColor} `}>
+                <div style={{ color: statusColor }} className={`stat-value  `}>
                   {data.status}
                 </div>
-                <div className={`stat-desc ${statusColor}`}>
+                <div style={{ color: statusColor }} className={`stat-desc `}>
                   {data.statusText}
                 </div>
               </div>

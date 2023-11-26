@@ -9,26 +9,26 @@ const BATCH_SIZE = parseInt(process.env.NEXT_PUBLIC_BATCH_SIZE || "10");
 let cancelRequest = false;
 
 const LinksList = ({ urls }: { urls: string[] }) => {
-  const mappedURLs = urls.map((u) => {
-    return { url: u, status: null, statusText: "", loading: false };
-  });
-  const [urlList, setUrlList] = useState(mappedURLs);
+  const [urlList, setUrlList] = useState(urls);
   const [searchText, setSearchText] = React.useState<string>("");
   const [debouncedSearchText] = useDebounce(searchText, 600);
 
   const [processing, setProcessing] = useState(false);
   const [urlStatusSet, setUrlStatusSet] = useState<Record<string, number>>({});
   const [processed, setProcessed] = useState(0);
+  const [showOnlyBroken, setShowOnlyBroken] = useState(false);
 
   //   const [currentProcessingIndex, setCurrentProcessingIndex] = useState(0);
 
   useEffect(() => {
     setUrlList(
-      mappedURLs.filter((u) =>
-        u.url.toLowerCase().includes(debouncedSearchText.toLowerCase())
+      urls.filter(
+        (u) =>
+          u.toLowerCase().includes(debouncedSearchText.toLowerCase()) &&
+          (showOnlyBroken ? urlStatusSet[u] != 200 : true)
       )
     );
-  }, [debouncedSearchText]);
+  }, [debouncedSearchText, showOnlyBroken]);
 
   const processURLs = async (index: number) => {
     // process urls in batches of 10 by hitting the api for getting url status
@@ -41,9 +41,9 @@ const LinksList = ({ urls }: { urls: string[] }) => {
 
     let currentBatch = [];
     for (let i = index; i < Math.min(index + BATCH_SIZE, urlList.length); i++) {
-      const url = urlList[i];
-      if (urlStatusSet[url.url] != undefined) continue;
-      currentBatch.push(url.url);
+      const url = urls[i];
+      if (urlStatusSet[url] != undefined) continue;
+      currentBatch.push(url);
     }
     const resp = await axios.post("/api/url-status", { urls: currentBatch });
     const newRecord: Record<string, number> = {};
@@ -52,7 +52,11 @@ const LinksList = ({ urls }: { urls: string[] }) => {
     );
     setUrlStatusSet((prev) => ({ ...prev, ...newRecord }));
     setProcessed(index + BATCH_SIZE);
-    processURLs(index + BATCH_SIZE);
+    // delay for 1 second
+    setTimeout(() => {
+      processURLs(index + BATCH_SIZE);
+    }, 1000);
+;
   };
 
   return (
@@ -75,7 +79,6 @@ const LinksList = ({ urls }: { urls: string[] }) => {
               <span className="label-text">Filter</span>
             </label>
             <input
-              disabled={processing}
               type="text"
               placeholder="something/else"
               className="input input-bordered w-full"
@@ -85,6 +88,16 @@ const LinksList = ({ urls }: { urls: string[] }) => {
               }}
             />
           </div>
+
+          <label className="label cursor-pointer">
+            <span className="label-text">Only show broken links?</span>
+            <input
+              type="checkbox"
+              checked={showOnlyBroken}
+              className="checkbox"
+              onClick={(v) => setShowOnlyBroken((prev) => !prev)}
+            />
+          </label>
           <button
             onClick={() => {
               if (processing) return;
@@ -110,7 +123,6 @@ const LinksList = ({ urls }: { urls: string[] }) => {
               Stop
             </button>
           )}
-          sp
         </div>
       </div>
       {processing && (
@@ -118,10 +130,10 @@ const LinksList = ({ urls }: { urls: string[] }) => {
           <progress
             className="progress progress-success w-full"
             value={processed}
-            max={urlList.length}
+            max={urls.length}
           ></progress>
           <div className="flex  whitespace-nowrap text-lg text-base-content font-bold">
-            {processed} / {urlList.length}
+            {processed} / {urls.length}
           </div>
         </div>
       )}
@@ -138,12 +150,7 @@ const LinksList = ({ urls }: { urls: string[] }) => {
           </thead>
           <tbody>
             {urlList.map((u, i) => (
-              <Row
-                key={u.url}
-                url={u.url}
-                index={i}
-                status={urlStatusSet[u.url]}
-              />
+              <Row key={u} url={u} index={i} status={urlStatusSet[u]} />
             ))}
           </tbody>
         </table>

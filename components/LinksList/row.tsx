@@ -27,7 +27,7 @@ const Row = ({
           </p>
         </Link>
       </td>
-      <td className={`text-center ${color}`}>{`${
+      <td style={{color:color}} className={`text-center`}>{`${
         status == undefined ? "Unknown" : status
       }` }</td>
       <td className="text-center ">

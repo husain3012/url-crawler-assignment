@@ -1,14 +1,14 @@
 export const statusToColor = (status: number) => {
     if (status >= 200 && status < 300) {
-        return "text-success";
+        return "#81C784"
     } else if (status >= 300 && status < 400) {
-        return "text-warning";
+        return "#FFE082";
     } else if (status >= 400 && status < 500) {
-        return "text-error";
+        return "#EF5350";
     } else if (status >= 500) {
-        return "text-error";
+        return "#7986CB";
     }
-    return "text-primary";
+    return "#7986CB";
     }
 
 export const bytesToHumanReadable = (bytes: number) => {
