@@ -36,7 +36,7 @@ export default async function Summary({
       <div className="card w-full bg-base-200 shadow-xl">
         <figure>
           {/* <img src={` `} className="w-full h-72"></img> */}
-          <iframe src={url} className="w-full h-72"></iframe>
+          <iframe  src={url} className="w-full h-72"></iframe>
         </figure>
         <div className="card-body">
           <div className="flex sm:justify-between justify-center gap-3 flex-wrap ">

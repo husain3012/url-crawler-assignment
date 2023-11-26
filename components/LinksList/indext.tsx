@@ -28,7 +28,7 @@ const LinksList = ({ urls }: { urls: string[] }) => {
           (showOnlyBroken ? urlStatusSet[u] != 200 : true)
       )
     );
-  }, [debouncedSearchText, showOnlyBroken]);
+  }, [debouncedSearchText, showOnlyBroken, urlStatusSet]);
 
   const processURLs = async (index: number) => {
     // process urls in batches of 10 by hitting the api for getting url status
