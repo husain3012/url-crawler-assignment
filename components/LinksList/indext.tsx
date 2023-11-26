@@ -5,7 +5,7 @@ import { useDebounce, useDebouncedCallback } from "use-debounce";
 import axios from "axios";
 
 const BATCH_SIZE = parseInt(process.env.NEXT_PUBLIC_CLIENT_BATCH_SIZE || "10");
-console.log('NEXT_PUBLIC_CLIENT_BATCH_SIZE', NEXT_PUBLIC_CLIENT_BATCH_SIZE)
+console.log('NEXT_PUBLIC_CLIENT_BATCH_SIZE', BATCH_SIZE)
 
 let cancelRequest = false;
 
