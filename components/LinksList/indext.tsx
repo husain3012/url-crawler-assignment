@@ -62,6 +62,12 @@ const LinksList = ({ urls }: { urls: string[] }) => {
           <h2 className="card-title">{urls.length} URLs Found</h2>
           <span>(Showing {urlList.length})</span>
         </div>
+        <span>
+          {" "}
+          Click
+          <kbd className="kbd kbd-xs">Start Processing</kbd> to scan all the
+          URLs
+        </span>
 
         <div className="flex w-full justify-between gap-4 items-end">
           <div className="form-control  w-full">
@@ -69,7 +75,7 @@ const LinksList = ({ urls }: { urls: string[] }) => {
               <span className="label-text">Filter</span>
             </label>
             <input
-            disabled={processing}
+              disabled={processing}
               type="text"
               placeholder="something/else"
               className="input input-bordered w-full"
@@ -79,7 +85,6 @@ const LinksList = ({ urls }: { urls: string[] }) => {
               }}
             />
           </div>
-
           <button
             onClick={() => {
               if (processing) return;
@@ -105,6 +110,7 @@ const LinksList = ({ urls }: { urls: string[] }) => {
               Stop
             </button>
           )}
+          sp
         </div>
       </div>
       {processing && (
